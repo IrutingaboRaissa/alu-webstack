@@ -39,7 +39,7 @@ frontend raissa-frontend
         default_backend raissa-backend
 backend raissa-backend
         balance roundrobin
-        server 6119-web-01 34.233.119.111.16:80 check
+        server 6119-web-01 34.233.119.111:80 check
         server 6119-web-02 107.23.182.166:80 check
 
 
@@ -49,8 +49,8 @@ frontend raissa-frontend
         default_backend raissa-backend
 backend raissa-backend
         balance roundrobin
-        server 6119-web-01 34.233.119.111.16:80 check
-server 6119-web-02 107.23.182.166:80 check
+        server 6119-web-01 34.233.119.111:80 check
+        server 6119-web-02 107.23.182.166:80 check
 
 
 frontend raissa-frontend
