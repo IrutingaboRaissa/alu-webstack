@@ -1,9 +1,8 @@
 global
         log /dev/log    local0
-        log /dev/log    local1 notice
+        log /dev/log    local1 notice        
         chroot /var/lib/haproxy
-        stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
-        stats timeout 30s
+        stats socket /run/haproxy/admin.sock>        stats timeout 30s
         user haproxy
         group haproxy
         daemon
@@ -12,53 +11,22 @@ global
         ca-base /etc/ssl/certs
         crt-base /etc/ssl/private
 
-        # See: https://ssl-config.mozilla.org/#server=haproxy&server-version=2.0.3&config=intermediate
-        ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES>        ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
-        ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+        # See: https://ssl-config.mozilla.or>        ssl-default-bind-ciphers ECDHE-ECDSA>        ssl-default-bind-ciphersuites TLS_AE>        ssl-default-bind-options ssl-min-ver>
 
 defaults
-        log     global
+log     global
         mode    http
         option  httplog
         option  dontlognull
         timeout connect 5000
         timeout client  50000
         timeout server  50000
-        errorfile 400 /etc/haproxy/errors/400.http
-        errorfile 403 /etc/haproxy/errors/403.http
-        errorfile 408 /etc/haproxy/errors/408.http
-        errorfile 500 /etc/haproxy/errors/500.http
-        errorfile 502 /etc/haproxy/errors/502.http
-        errorfile 503 /etc/haproxy/errors/503.http
-        errorfile 504 /etc/haproxy/errors/504.http
+        errorfile 400 /etc/haproxy/errors/40>        errorfile 403 /etc/haproxy/errors/40>        errorfile 408 /etc/haproxy/errors/40>        errorfile 500 /etc/haproxy/errors/50>        errorfile 502 /etc/haproxy/errors/50>        errorfile 503 /etc/haproxy/errors/50>        errorfile 504 /etc/haproxy/errors/50>
 
 frontend raissa-frontend
-
-       bind *:80
-        mode http
-        default_backend raissa-backend
-backend raissa-backend
+        bind *:443 ssl crt  /etc/letsencrypt>        http-request add-header x-Forwarded->        http-request redirect scheme https i>        use_backend http_back
+        default_backend raissa-backend  
+ backend raissa-backend
+        redirect scheme https if { ssl_fc }  
         balance roundrobin
-        server 6119-web-01 34.233.119.111:80 check
-        server 6119-web-02 107.23.182.166:80 check
-
-
-frontend raissa-frontend
-        bind *:80
-        mode http
-        default_backend raissa-backend
-backend raissa-backend
-        balance roundrobin
-        server 6119-web-01 34.233.119.111:80 check
-        server 6119-web-02 107.23.182.166:80 check
-
-
-frontend raissa-frontend
-        bind *:80
-        mode http
-        default_backend raissa-backend
-backend raissa-backend
-        balance roundrobin
-        server 6119-web-01 34.233.119.111:80 check
-        server 6119-web-02 107.23.182.166:80 check
-
+        server 6119-web-01 34.233.119.111:80>        server 6119-web-02 107.23.182.166:80>
